@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
 	GETTIME(begin);
 
 	/* inner product */
-	#pragma omp parallel shared (i,x,y) private(partial_result)
+	#pragma omp parallel shared (x,y,partial_result) private(i)
 	{
 		int tid   = omp_get_thread_num();
 		int procs = omp_get_num_threads();
@@ -57,14 +57,15 @@ int main(int argc, char **argv) {
 		//Esto es para 1 Thread por core
 		len = sizeof(cpu_set_t);
 		CPU_SET (tid, &mascara);
-		if (sched_setaffinity(0, len, &mascara) < 0)
-			printf("\n\nError :: sched_setaffinity\n\n");
+//		if (sched_setaffinity(0, len, &mascara) < 0)
+//			printf("\n\nError :: sched_setaffinity\n\n");
 
-		#pragma parallel for static(1)
+		#pragma omp for schedule(dynamic,1)
 		for(i=0; i<n; i++){
+			for(int j=0;j<100000;j++){
 				partial_result[tid]+=x[i]*y[i];
-
-//				#pragma omp critical
+			}
+			//				#pragma omp critical
 //				cout << "ID:" << omp_get_thread_num()  << endl ;
 		}
 
@@ -74,10 +75,35 @@ int main(int argc, char **argv) {
 		result+=partial_result[i];
 	}
 
+
+	/*
+#define N 1000
+ #define CHUNKSIZE 100
+
+
+	 int chunk;
+	 float a[N], b[N], c[N];
+
+	 /* Some initializations */
+/*	 for (i=0; i < N; i++)
+	   a[i] = b[i] = i * 1.0;
+	 chunk = CHUNKSIZE;
+
+	 #pragma omp parallel shared(a,b,c,chunk) private(i)
+	   {
+
+	   #pragma omp for schedule(dynamic,chunk) nowait
+	   for (i=0; i < N; i++)
+	     c[i] = a[i] + b[i];
+
+	   }   /* end of parallel region */
+
+
+
 	GETTIME(end);
 	DIFTIME(end,begin,time);
 
-	cout << "Result:" << partial_result << " time: "<< time << endl ;
+	cout << "Result:" << result << " time: "<< time << endl ;
 
 	return EXIT_SUCCESS;
 }

@@ -7,7 +7,7 @@ LIBS =
 TARGET =	example
 
 $(TARGET):	$(OBJS)
-	$(CXX) -o $(TARGET) $(OBJS) $(LIBS)
+	$(CXX) -o $(TARGET) $(OBJS) $(LIBS) -fopenmp
 
 all:	$(TARGET)
 
