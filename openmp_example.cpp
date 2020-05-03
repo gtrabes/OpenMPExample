@@ -95,7 +95,7 @@ int main (int argc, char *argv[]) {
 //				cout << "ID:" << omp_get_thread_num()  << endl ;
 //  	  	  	  }
 
-
+  GETTIME(begin);
 
 #pragma omp parallel private(i,tid,psum) shared(x,y) num_threads(P)
 {
@@ -112,7 +112,8 @@ tid = omp_get_thread_num();
 //cout << "Thread: " << tid << " partial sum = "<< psum << endl ;
 
 }
-
+	GETTIME(end);
+	DIFTIME(end,begin,time);
 
 	cout << "Parallel for -> Result:" << result << " time: "<< time << endl ;
 
