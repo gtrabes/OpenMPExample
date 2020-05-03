@@ -52,9 +52,7 @@ int main (int argc, char *argv[]) {
   GETTIME(begin);
 
   for(int i=0; i<n; i++){
-	  for(int j=0;j<100;j++){
-		  result+=x[i]*y[i];
-	  }
+	  result+=x[i]*y[i];
   }
 
   GETTIME(end);
@@ -105,11 +103,8 @@ psum = 0.0;
 tid = omp_get_thread_num();
 
 #pragma omp for schedule(static) reduction(+:result)
-  for (i=0; i<n; i++)
-    {
-	  for(int j=0;j<100;j++){
+  for (i=0; i<n; i++) {
 		  result += (x[i] * y[i]);
-	  }
 //      psum = result;
     }
 //printf("Thread %d partial sum = %f\n",tid, psum);
@@ -127,9 +122,7 @@ tid = omp_get_thread_num();
 
 	#pragma omp parallel for schedule(static) reduction(+:result) proc_bind(spread) num_threads(P)
 		for (i=0; i<n; i++) {
-			for(int j=0;j<100;j++){
 				result += (x[i] * y[i]);
-			}
 		}
 
 	GETTIME(end);
@@ -143,9 +136,7 @@ tid = omp_get_thread_num();
 
 		#pragma omp parallel for schedule(static) reduction(+:result) proc_bind(close) num_threads(P)
 			for (i=0; i<n; i++) {
-				for(int j=0;j<100;j++){
 					result += (x[i] * y[i]);
-				}
 			}
 
 		GETTIME(end);
