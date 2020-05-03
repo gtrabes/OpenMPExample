@@ -125,7 +125,7 @@ tid = omp_get_thread_num();
 
 	GETTIME(begin);
 
-	#pragma omp parallel for schedule(static) reduction(+:result) proc_bind(spread)
+	#pragma omp parallel for schedule(static) reduction(+:result) proc_bind(spread) num_threads(P)
 		for (i=0; i<n; i++) {
 			for(int j=0;j<100;j++){
 				result += (x[i] * y[i]);
@@ -141,7 +141,7 @@ tid = omp_get_thread_num();
 
 		GETTIME(begin);
 
-		#pragma omp parallel for schedule(static) reduction(+:result) proc_bind(close)
+		#pragma omp parallel for schedule(static) reduction(+:result) proc_bind(close) num_threads(P)
 			for (i=0; i<n; i++) {
 				for(int j=0;j<100;j++){
 					result += (x[i] * y[i]);
