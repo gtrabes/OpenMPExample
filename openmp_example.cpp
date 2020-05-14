@@ -106,7 +106,7 @@ tid = omp_get_thread_num();
   for (i=0; i<n; i++) {
 		  result += (x[i] * y[i]);
 //      psum = result;
-    }
+  }
 //printf("Thread %d partial sum = %f\n",tid, psum);
 //cout << "Thread: " << tid << " partial sum = "<< psum << endl ;
 

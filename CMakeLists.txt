@@ -12,6 +12,9 @@ set(HEADER_FILES mytime.h)
 
 add_executable(openmp_example openmp_example.cpp ${HEADER_FILES})
 
+add_executable(openmp_function_example openmp_function_example.cpp ${HEADER_FILES})
+
+
 set(CMAKE_CXX_FLAGS -fopenmp)
 
 
