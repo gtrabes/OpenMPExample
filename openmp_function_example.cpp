@@ -76,14 +76,14 @@ std::vector<double> parallel_for_each2(int thread_number, ITERATOR first, ITERAT
 
 
 template<class T, class Function>
-void parallel_for_each(int thread_number, std::vector<T> & obj, Function f){
+void parallel_for_each(int thread_number, std::vector<T>& obj, Function f){
 	/* set number of threads */
 	omp_set_num_threads(thread_number);
 	int size = obj.size();
 	double result;
 	#pragma omp parallel for firstprivate(f) shared(obj)
 		for (int i = 0; i < size; i++){
-			result = f(obj[i]);
+			f(obj[i]);
 		}
 //	cout << "Aca parallel after loop" << result << '\n';
 }
