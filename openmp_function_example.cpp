@@ -76,17 +76,16 @@ std::vector<double> parallel_for_each2(int thread_number, ITERATOR first, ITERAT
 
 
 template<class T, class Function>
-std::vector<T> parallel_for_each(int thread_number, std::vector<T>& obj, Function f){
+void parallel_for_each(int thread_number, std::vector<T>& obj, Function f){
 	/* set number of threads */
 	omp_set_num_threads(thread_number);
 	int size = obj.size();
 
 	#pragma omp parallel for firstprivate(f) shared(obj) num_threads(thread_number) schedule(static)
 		for (int i = 0; i < size; i++){
-			f(obj[i]);
+			obj[i] = f(obj[i]);
 		}
 //	cout << "Aca parallel after loop" << result << '\n';
-	return obj;
 }
 
 
@@ -96,7 +95,7 @@ template< class InputIt, class UnaryFunction >
 void omp_for_each(int thread_number, InputIt first, InputIt last, UnaryFunction f) {
 	#pragma omp parallel for num_threads(thread_number) schedule(static)
 	for(InputIt iter = first; iter < last; ++iter) {
-		f(*iter);
+		*iter = f(*iter);
 	}
 }
 
@@ -132,13 +131,13 @@ int main (int argc, char *argv[]) {
   GETTIME(begin);
 
   for(int i=0; i<n; i++){
-	  y.push_back(square_root(x.at(i)));
+	  x.at(i) = square_root(x.at(i));
   }
 
   GETTIME(end);
   DIFTIME(end,begin,time);
 
-  cout << "Sequential -> Result:" << y.at(0) << " time: "<< time << endl;
+  cout << "Sequential -> Result:" << x.at(0) << " time: "<< time << endl;
 
   y.clear();
   x.clear();
@@ -150,12 +149,12 @@ int main (int argc, char *argv[]) {
 
   GETTIME(begin);
 
-  y = parallel_for_each(P, x, square_root);
+  parallel_for_each(P, x, square_root);
 
   GETTIME(end);
   DIFTIME(end,begin,time);
 
-  cout << "Parallel version passing object -> Result:" << y.at(0) << " time: "<< time << endl ;
+  cout << "Parallel version passing object -> Result:" << x.at(0) << " time: "<< time << endl ;
 
 
   x.clear();
@@ -173,7 +172,7 @@ int main (int argc, char *argv[]) {
   GETTIME(end);
   DIFTIME(end,begin,time);
 
-  cout << "Parallel version passing begin and end -> Result:" << y.at(0) << " time: "<< time << endl ;
+  cout << "Parallel version passing begin and end -> Result:" << x.at(0) << " time: "<< time << endl ;
 
 
 
