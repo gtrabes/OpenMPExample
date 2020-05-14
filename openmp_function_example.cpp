@@ -85,9 +85,18 @@ void parallel_for_each(int thread_number, std::vector<T> & obj, Function f){
 		for (int i = 0; i < size; i++){
 			result = f(obj[i]);
 		}
-	cout << "Aca parallel after loop" << result << '\n';
+//	cout << "Aca parallel after loop" << result << '\n';
 }
 
+
+
+
+template< class InputIt, class UnaryFunction >
+void omp_for_each(InputIt first, InputIt last, UnaryFunction f) {
+	#pragma omp parallel for
+	for(InputIt iter = first; iter < last; ++iter) {
+		f(*iter);  }
+}
 
 
 
